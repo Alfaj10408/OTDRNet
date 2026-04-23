@@ -1,6 +1,28 @@
 # OTDRNet: OT-Regularised Prompt Routing for CS-MRI Reconstruction
 
-**ICLR 2026 Course Project** | [Paper PDF](./OTDRNet_ICLR2026.pdf)
+**ECE 5700 Course Project**
+
+---
+
+## Network Architecture
+
+### Full OTDRNet Pipeline
+
+![OTDRNet Architecture](Slide1.jpg)
+
+### OT-Dynamic Prompt Learner (OT-DPL) Detail
+
+![OT-DPL Detail](Slide2.jpg)
+
+---
+
+## Sample Reconstruction Result
+
+Single test slice at checkpoint 190k (PSNR = 32.94 dB, SSIM = 0.9528):
+
+![Reconstruction Result](result_190k.png)
+
+*From left: LQ Input → Prediction → Error Map → Ground Truth*
 
 ---
 
@@ -42,7 +64,10 @@ cs_otdr/
 │   └── visualize.py
 ├── train.py                     # Training loop (AMP + NaN guard)
 ├── eval.py                      # Full test-set evaluation
-└── infer.py                     # Inference (single / folder)
+├── infer.py                     # Inference (single / folder)
+├── Slide1.jpg                   # Architecture figure
+├── Slide2.jpg                   # OT-DPL detail figure
+└── result_190k.png              # Sample reconstruction output
 ```
 
 ---
