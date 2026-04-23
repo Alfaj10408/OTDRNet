@@ -1,0 +1,51 @@
+# configs/default.yaml
+# ──────────────────────────────────────────────────────────────
+# Tuned for: AMD EPYC 7763 (28 cores, no HT) + A100 80GB PCIe
+# Shared server — conservative GPU/CPU estimates applied
+
+model:
+  in_c:        1
+  C:           48
+  enc_blocks:  [2, 3, 3, 4]
+  num_heads:   [1, 2, 4, 8]
+  n_prompts:   5
+  n_experts:   5
+  top_k:       1
+  n_groups:    3
+  sre_kernel:  11
+
+ot:
+  eps:       0.05
+  iters:     20           # 20 is sufficient during training (~5x faster than 100)
+  tol:       1.0e-4
+  lambda_ot: 0.1
+
+data:
+  root:        data/processed
+  patch_size:  128
+  augment:     true
+  R:           4
+
+train:
+  batch_size:  16      # was 32; ~37 GB free, 48 uses ~21 GB safely
+  num_workers: 12         # was 4; 28 cores available, 12 safe on shared server
+  iterations:  200000
+  lr_init:     2.0e-4
+  lr_min:      1.0e-6
+  scheduler:   cosine
+  optimizer:   adam
+  beta1:       0.9
+  beta2:       0.999
+  grad_clip:   0.01
+
+val:
+  every_iter:  5000
+  batch_size:  1
+
+log:
+  exp_name:        otdr_mri_default
+  checkpoint_dir:  experiments/checkpoints
+  log_dir:         experiments/logs
+  result_dir:      experiments/results
+  save_every:      10000
+  use_tensorboard: false

@@ -1,0 +1,51 @@
+# configs/strong_prompt.yaml
+# ──────────────────────────────────────────────────────────────
+# Stronger OT regularization to force prompt discrimination.
+# Use when prompts are collapsed (off-diag cosine > 0.5)
+
+model:
+  in_c:        1
+  C:           48
+  enc_blocks:  [2, 3, 3, 4]
+  num_heads:   [1, 2, 4, 8]
+  n_prompts:   5
+  n_experts:   5
+  top_k:       1
+  n_groups:    3
+  sre_kernel:  11
+
+ot:
+  eps:       0.01   # was 0.05 — sharper, more decisive OT assignments
+  iters:     30     # slightly more iters since eps is smaller
+  tol:       1.0e-4
+  lambda_ot: 0.5    # was 0.1 — 5x stronger OT signal vs L1
+
+data:
+  root:        data/processed
+  patch_size:  128
+  augment:     true
+  R:           4
+
+train:
+  batch_size:  16
+  num_workers: 12
+  iterations:  150000   # fresh run from scratch
+  lr_init:     2.0e-4
+  lr_min:      1.0e-6
+  scheduler:   cosine
+  optimizer:   adam
+  beta1:       0.9
+  beta2:       0.999
+  grad_clip:   0.01
+
+val:
+  every_iter:  5000
+  batch_size:  1
+
+log:
+  exp_name:        otdr_strong_prompt
+  checkpoint_dir:  experiments/checkpoints
+  log_dir:         experiments/logs
+  result_dir:      experiments/results
+  save_every:      10000
+  use_tensorboard: false

@@ -1,0 +1,82 @@
+# configs/ablation.yaml
+# ──────────────────────────────────────────────────────────────
+# Ablation study configurations.
+# Each entry overrides keys from default.yaml.
+# Run: python train.py --config configs/ablation.yaml --ablation <name>
+
+ablations:
+
+  # ── Baseline: plain Restormer, no prompts, no routing ──────
+  baseline:
+    model:
+      n_prompts:  0
+      n_experts:  0
+    ot:
+      lambda_ot:  0.0
+    log:
+      exp_name:   ablation_baseline
+
+  # ── A1: DPL only, no OT regularization ─────────────────────
+  dpl_no_ot:
+    ot:
+      lambda_ot:  0.0       # disables L_ot
+    log:
+      exp_name:   ablation_dpl_no_ot
+
+  # ── A2: DPL + OT, no MoDE (no expert routing) ──────────────
+  dpl_ot_no_mode:
+    model:
+      n_experts:  1         # single expert = no routing
+    log:
+      exp_name:   ablation_dpl_ot_no_mode
+
+  # ── A3: DPL + OT + MoDE, no SRE ───────────────────────────
+  no_sre:
+    model:
+      sre_kernel: 0         # flag to skip SRE in PTB
+    log:
+      exp_name:   ablation_no_sre
+
+  # ── A4: Full model (default) ────────────────────────────────
+  full:
+    log:
+      exp_name:   ablation_full
+
+  # ── A5: top-k routing study ─────────────────────────────────
+  topk_2:
+    model:
+      top_k: 2
+    log:
+      exp_name:   ablation_topk2
+
+  topk_3:
+    model:
+      top_k: 3
+    log:
+      exp_name:   ablation_topk3
+
+  # ── A6: prompt count study ──────────────────────────────────
+  prompts_2:
+    model:
+      n_prompts: 2
+    log:
+      exp_name:   ablation_prompts2
+
+  prompts_8:
+    model:
+      n_prompts: 8
+    log:
+      exp_name:   ablation_prompts8
+
+  # ── A7: expert count study ──────────────────────────────────
+  experts_3:
+    model:
+      n_experts: 3
+    log:
+      exp_name:   ablation_experts3
+
+  experts_7:
+    model:
+      n_experts: 7
+    log:
+      exp_name:   ablation_experts7
